@@ -86,6 +86,7 @@
 -define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
 'Assets/Scripts/Grid.cs'
+'Assets/Scripts/Heap.cs'
 'Assets/Scripts/Node.cs'
 'Assets/Scripts/Pathfinding.cs'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
