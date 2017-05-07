@@ -19,6 +19,7 @@ public class Heap<T> where T : IHeapItem<T> {
 		items [currentItemCount] = item;
 
 		SortUp (item);
+		currentItemCount++;
 
 	}
 
@@ -55,7 +56,7 @@ public class Heap<T> where T : IHeapItem<T> {
 	}
 
 	void SortUp(T item) {
-		int parentIndex = (item.HeapIndex - 1 / 2);
+		int parentIndex = (item.HeapIndex - 1) / 2;
 
 		while (true) {
 			T parentItem = items [parentIndex];
@@ -66,7 +67,7 @@ public class Heap<T> where T : IHeapItem<T> {
 				break;
 			}
 
-			parentIndex = (item.HeapIndex - 1 / 2);
+			parentIndex = (item.HeapIndex - 1) / 2;
 		}
 	}
 

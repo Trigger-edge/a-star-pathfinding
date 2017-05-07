@@ -29,7 +29,7 @@ public class Pathfinding : MonoBehaviour {
 		Node targetNode = grid.GetNodeFromWorldPoint (targetPos);
 
 		// open-set
-		List<Node> openSet = new List<Node>();
+		Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
 
 		// closed-set
 		HashSet<Node> closedSet = new HashSet<Node>();
@@ -38,14 +38,7 @@ public class Pathfinding : MonoBehaviour {
 
 		// Loop
 		while (openSet.Count > 0) {
-			Node currentNode = openSet [0];
-			for (int i = 1; i < openSet.Count; i++) {
-				if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost) {
-					currentNode = openSet[i];
-				}
-			}
-
-			openSet.Remove (currentNode);
+			Node currentNode = openSet.RemoveFirst ();
 			closedSet.Add (currentNode);
 
 			// If path found, retrace path
@@ -74,8 +67,10 @@ public class Pathfinding : MonoBehaviour {
 					neighbour.parent = currentNode;
 
 					// If neighbour not in open-set, add it to open-set
-					if (!openSet.Contains (neighbour))
+					if (!openSet.Contains (neighbour)) {
 						openSet.Add (neighbour);
+						openSet.UpdateItem (neighbour);
+					}
 				}
 			}
 		}
