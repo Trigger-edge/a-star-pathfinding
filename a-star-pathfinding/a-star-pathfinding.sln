@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{441F4AC5-B2DD-B199-7C3A-EF47E3EE1481}") = "a-star-pathfinding", "Assembly-CSharp.csproj", "{9B9B1B0E-3083-866E-FEF5-756DAC55E6A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B9B1B0E-3083-866E-FEF5-756DAC55E6A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9B1B0E-3083-866E-FEF5-756DAC55E6A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9B1B0E-3083-866E-FEF5-756DAC55E6A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9B1B0E-3083-866E-FEF5-756DAC55E6A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
