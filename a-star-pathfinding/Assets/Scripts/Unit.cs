@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Manages one agent object
+// Manages agent object
 public class Unit : MonoBehaviour {
 
 	public Transform target;
@@ -52,7 +52,7 @@ public class Unit : MonoBehaviour {
 
 		if (path != null) {
 			for (int i = targetIndex; i < path.Length; i++) {
-				// Path drawin in black
+				// Path drawn in black
 				Gizmos.color = Color.black;
 				Gizmos.DrawCube (path [i], Vector3.one);
 

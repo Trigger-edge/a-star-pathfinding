@@ -26,7 +26,7 @@ public class Node : IHeapItem<Node> {
 
 	}
 
-	// Node f-cost (= g-cost + h-cost)
+	// F-cost (= g-cost + h-cost)
 	public int fCost {
 		
 		get {
@@ -52,7 +52,7 @@ public class Node : IHeapItem<Node> {
 
 		int compare = fCost.CompareTo (nodeToCompare.fCost);
 
-		// Compare h-costs if f-costs are the same
+		// Compare h-costs in case f-costs are the same
 		if (compare == 0) {
 			compare = hCost.CompareTo (nodeToCompare.hCost);
 		}

@@ -10,11 +10,19 @@ public class Pathfinding : MonoBehaviour {
 	PathRequestManager requestManager;
 	Grid grid;
 
+	public int heuristic;
+
 	// Performed when run button pressed
 	void Awake() {
 		
 		grid = GetComponent<Grid> ();
 		requestManager = GetComponent<PathRequestManager> ();
+
+		// SET HEURISTIC:
+		// 0: Manhattan
+		// 1: Euclidian
+		// 2: Diagonals
+		heuristic = 2;
 
 	}
 
@@ -47,7 +55,7 @@ public class Pathfinding : MonoBehaviour {
 
 			openSet.Add (startNode);
 
-			// Loop
+			// While open-set is not empty, do loop
 			while (openSet.Count > 0) {
 				Node currentNode = openSet.RemoveFirst ();
 				closedSet.Add (currentNode);
@@ -66,14 +74,45 @@ public class Pathfinding : MonoBehaviour {
 					if (!neighbour.walkable || closedSet.Contains (neighbour)) {
 						continue;
 					}
-						
-					int newCostToNeighbour = currentNode.gCost + GetDistance (currentNode, neighbour) + neighbour.movementPenalty;
+
+					// Calculate heuristic costs
+					int newCostToNeighbour;
+
+					switch (heuristic) {
+						case 0:
+							newCostToNeighbour = currentNode.gCost + GetManhattanDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							break;
+						case 1:
+							newCostToNeighbour = currentNode.gCost + GetEuclideanDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							break;
+						case 2:
+							newCostToNeighbour = currentNode.gCost + GetDiagonalsDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							break;
+						default:
+							newCostToNeighbour = currentNode.gCost + GetEuclideanDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							break;
+					}
 
 					// If new path to neighbour is shorter or neighbour not in open-set
 					if (newCostToNeighbour < neighbour.gCost || !openSet.Contains (neighbour)) {
-						// Set neighbour's new f-cost
+						// Set neighbour's g-cost
 						neighbour.gCost = newCostToNeighbour;
-						neighbour.hCost = GetDistance (neighbour, targetNode);
+
+						// Set neighbour's h-cost
+						switch (heuristic) {
+							case 0:
+								neighbour.hCost = GetManhattanDistance (neighbour, targetNode);
+								break;
+							case 1:
+								neighbour.hCost = GetEuclideanDistance (neighbour, targetNode);
+								break;
+							case 2:
+								neighbour.hCost = GetDiagonalsDistance (neighbour, targetNode);
+								break;
+							default:
+								neighbour.hCost = GetEuclideanDistance (neighbour, targetNode);
+								break;
+						}
 
 						// Set parent of neighbour to current node
 						neighbour.parent = currentNode;
@@ -139,8 +178,30 @@ public class Pathfinding : MonoBehaviour {
 
 	}
 
-	// Heuristic function to estimate distance between two nodes 
-	int GetDistance(Node nodeA, Node nodeB) {
+	// Manhattan distance heuristic
+	int GetManhattanDistance(Node nodeA, Node nodeB) {
+
+		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
+		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
+
+		// Calculate Manhattan distance
+		return distX + distY;
+
+	}
+
+	// Euclidian distance heuristic 
+	int GetEuclideanDistance(Node nodeA, Node nodeB) {
+
+		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
+		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
+
+		// Calculate Euclidean distance
+		return (distX * distX) + (distY * distY);
+
+	}
+
+	// Diagonals distance heuristic 
+	int GetDiagonalsDistance(Node nodeA, Node nodeB) {
 
 		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
 		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
@@ -151,8 +212,8 @@ public class Pathfinding : MonoBehaviour {
 			return 14 * distY + 10 * (distX - distY);
 		}
 
-		// Calculate number of diagonal nodes to get to the same x value as nodeB, then calculate number
-		// of vertical nodes to get to nodeB
+		 // Calculate number of diagonal nodes to get to the same x value as nodeB, then calculate number
+		 // of vertical nodes to get to nodeB
 		return 14 * distX + 10 * (distY - distX);
 
 	}

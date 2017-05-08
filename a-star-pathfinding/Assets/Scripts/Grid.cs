@@ -8,7 +8,7 @@ public class Grid : MonoBehaviour {
 	public Vector2 gridWorldSize;
 	public float nodeRadius;
 	public LayerMask unwalkableMask;
-	public bool displayGridGizmos;
+	public bool displayGridGizmos = false;
 	public TerrainType[] walkableRegions;
 	LayerMask walkableMask;
 	Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
@@ -25,14 +25,18 @@ public class Grid : MonoBehaviour {
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
 
-		foreach (TerrainType region in walkableRegions) {
-			walkableMask.value |= region.terrainMask.value;
-			walkableRegionsDictionary.Add ((int)Mathf.Log(region.terrainMask.value, 2),region.terrainPenalty);
-		}
-
+		InitTerrain ();
 		CreateGrid ();
 
-		displayGridGizmos = false;
+	}
+
+	// Initialize terrain types
+	void InitTerrain() {
+
+		foreach (TerrainType region in walkableRegions) {
+			walkableMask.value = walkableMask.value | region.terrainMask.value;
+			walkableRegionsDictionary.Add ((int)Mathf.Log(region.terrainMask.value, 2),region.penalty);
+		}
 
 	}
 
@@ -117,7 +121,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
-	// Draw grid if displayGridGizmos is TRUE
+	// Draw grid if specified
 	void OnDrawGizmos() {
 		
 		Gizmos.DrawWireCube (transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
@@ -137,7 +141,7 @@ public class Grid : MonoBehaviour {
 	public class TerrainType {
 
 		public LayerMask terrainMask;
-		public int terrainPenalty;
+		public int penalty;
 
 	}
 
