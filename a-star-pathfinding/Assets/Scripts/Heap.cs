@@ -2,17 +2,20 @@
 using System.Collections;
 using System;
 
+// Heap structure used by A* 
 public class Heap<T> where T : IHeapItem<T> {
 
 	T[] items;
 	int currentItemCount;
 
+	// Constructor
 	public Heap(int maxHeapSize) {
 
 		items = new T[maxHeapSize];
 
 	}
 
+	// Add item to heap
 	public void Add(T item) {
 
 		item.HeapIndex = currentItemCount;
@@ -23,6 +26,7 @@ public class Heap<T> where T : IHeapItem<T> {
 
 	}
 
+	// Remove top element from heap
 	public T RemoveFirst() {
 		
 		T firstItem = items [0];
@@ -37,10 +41,12 @@ public class Heap<T> where T : IHeapItem<T> {
 
 	}
 
+	// Update item position
 	public void UpdateItem(T item) {
 		SortUp (item);
 	}
 
+	// Get number of items in heap
 	public int Count {
 
 		get {
@@ -49,18 +55,21 @@ public class Heap<T> where T : IHeapItem<T> {
 
 	}
 
+	// Check if an item exists in heap
 	public bool Contains(T item) {
 
 		return Equals (items [item.HeapIndex], item);
 
 	}
 
+	// Sort up 
 	void SortUp(T item) {
 		int parentIndex = (item.HeapIndex - 1) / 2;
 
 		while (true) {
 			T parentItem = items [parentIndex];
 
+			// If item has a higher priority than parent, swap it with parent
 			if (item.CompareTo (parentItem) > 0) {
 				Swap (item, parentItem);
 			} else {
@@ -71,6 +80,7 @@ public class Heap<T> where T : IHeapItem<T> {
 		}
 	}
 
+	// Sort down
 	void SortDown(T item) {
 
 		while (true) {
@@ -101,6 +111,7 @@ public class Heap<T> where T : IHeapItem<T> {
 
 	}
 
+	// Swap two items in heap
 	void Swap(T itemA, T itemB) {
 		items [itemA.HeapIndex] = itemB;
 		items [itemB.HeapIndex] = itemA;

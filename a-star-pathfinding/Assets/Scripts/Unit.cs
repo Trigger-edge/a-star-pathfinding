@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Manages one agent object
 public class Unit : MonoBehaviour {
 
 	public Transform target;
@@ -8,12 +9,14 @@ public class Unit : MonoBehaviour {
 	Vector3[] path;
 	int targetIndex;
 
+	// Performed when run button pressed
 	void Start() {
 
 		PathRequestManager.RequestPath (transform.position, target.position, OnPathFound);
 
 	}
 
+	// Start FollowPath coroutine if path found
 	public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 
 		if (pathSuccessful) {
@@ -24,6 +27,7 @@ public class Unit : MonoBehaviour {
 
 	}
 
+	// Coroutine to move agent along path
 	IEnumerator FollowPath() {
 
 		Vector3 currentWaypoint = path [0];
@@ -43,10 +47,12 @@ public class Unit : MonoBehaviour {
 
 	}
 
+	// Draw path
 	public void OnDrawGizmos() {
 
 		if (path != null) {
 			for (int i = targetIndex; i < path.Length; i++) {
+				// Path drawin in black
 				Gizmos.color = Color.black;
 				Gizmos.DrawCube (path [i], Vector3.one);
 

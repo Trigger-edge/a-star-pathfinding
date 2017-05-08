@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Sets up the grid using nodes
 public class Grid : MonoBehaviour {
 
 	public Vector2 gridWorldSize;
@@ -17,6 +18,7 @@ public class Grid : MonoBehaviour {
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
 
+	// Performed when run button pressed
 	void Awake() {
 		
 		nodeDiameter = nodeRadius * 2;
@@ -34,6 +36,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
+	// Maximum grid size
 	public int MaxSize {
 		
 		get {
@@ -42,6 +45,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
+	// Create the grid used by A* search
 	void CreateGrid() {
 		
 		grid = new Node[gridSizeX, gridSizeY];
@@ -55,6 +59,7 @@ public class Grid : MonoBehaviour {
 
 				int movementPenalty = 0;
 
+				// If walkable, get penalties for each terrain type using raycasting
 				if (walkable) {
 					Ray ray = new Ray (worldPoint + Vector3.up*50, Vector3.down);
 					RaycastHit hit;
@@ -69,6 +74,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
+	// Get neighbours of a node
 	public List<Node> GetNeighbours (Node node) {
 
 		List<Node> neighbours = new List<Node> ();
@@ -83,7 +89,7 @@ public class Grid : MonoBehaviour {
 				int checkX = node.gridX + x;
 				int checkY = node.gridY + y;
 
-				// Check if inside grid
+				// Check if neighbour is inside the grid before adding to list
 				if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
 					neighbours.Add (grid [checkX, checkY]);
 				}
@@ -94,6 +100,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
+	// Return a node when given (x, y, z) values
 	public Node GetNodeFromWorldPoint(Vector3 worldPosition) {
 
 		float percentX = (worldPosition.x / gridWorldSize.x) + .5f;
@@ -110,12 +117,14 @@ public class Grid : MonoBehaviour {
 
 	}
 
+	// Draw grid if displayGridGizmos is TRUE
 	void OnDrawGizmos() {
 		
 		Gizmos.DrawWireCube (transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
 		if (grid != null && displayGridGizmos) {
 			foreach (Node n in grid) {
+				// Unwalkable nodes drawn in red, walkable areas drawn in white
 				Gizmos.color = (n.walkable) ? Color.white : Color.red;
 				Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
 			}
@@ -123,6 +132,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
+	// Object combining each terrain with an associated movement penalty
 	[System.Serializable]
 	public class TerrainType {
 

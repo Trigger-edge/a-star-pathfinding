@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System;
 
+// A* pathfinding class
 public class Pathfinding : MonoBehaviour {
 
 	PathRequestManager requestManager;
 	Grid grid;
 
+	// Performed when run button pressed
 	void Awake() {
 		
 		grid = GetComponent<Grid> ();
@@ -16,14 +18,17 @@ public class Pathfinding : MonoBehaviour {
 
 	}
 
+	// Start FindPath() as a coroutine
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos) {
 
 		StartCoroutine(FindPath(startPos, targetPos));
 
 	}
 
+	// A* search
 	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) {
 
+		// Timer for testing
 		Stopwatch sw = new Stopwatch ();
 		sw.Start ();
 
@@ -50,6 +55,7 @@ public class Pathfinding : MonoBehaviour {
 				// If path found, retrace path
 				if (currentNode == targetNode) {
 					pathSuccess = true;
+					// Stop timer and print time taken to find path
 					sw.Stop ();
 					print ("Path found: " + sw.ElapsedMilliseconds + "ms.");
 					break;
@@ -84,6 +90,7 @@ public class Pathfinding : MonoBehaviour {
 
 		yield return null;
 
+		// Retrace path if path found
 		if (pathSuccess) {
 			waypoints = RetracePath (startNode, targetNode);
 		}
@@ -92,6 +99,7 @@ public class Pathfinding : MonoBehaviour {
 
 	}
 
+	// Retrace path
 	Vector3[] RetracePath(Node startNode, Node targetNode) {
 
 		// Retrace path backwards
@@ -112,6 +120,7 @@ public class Pathfinding : MonoBehaviour {
 
 	}
 
+	// Simplify path based on directions of current and next node 
 	Vector3[] SimplifyPath(List<Node> path) {
 
 		List<Vector3> waypoints = new List<Vector3> ();
@@ -130,15 +139,20 @@ public class Pathfinding : MonoBehaviour {
 
 	}
 
+	// Heuristic function to estimate distance between two nodes 
 	int GetDistance(Node nodeA, Node nodeB) {
 
-		// Heuristic
 		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
 		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
 
-		if (distX > distY)
+		if (distX > distY) {
+			// Calculate number of diagonal nodes to get to the same y value as nodeB, then calculate number
+			// of horizontal nodes to get to nodeB
 			return 14 * distY + 10 * (distX - distY);
-		
+		}
+
+		// Calculate number of diagonal nodes to get to the same x value as nodeB, then calculate number
+		// of vertical nodes to get to nodeB
 		return 14 * distX + 10 * (distY - distX);
 
 	}

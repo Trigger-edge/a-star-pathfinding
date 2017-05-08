@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Node class
 public class Node : IHeapItem<Node> {
 
 	public bool walkable;
@@ -14,6 +15,7 @@ public class Node : IHeapItem<Node> {
 	public Node parent;
 	int heapIndex;
 
+	// Constructor
 	public Node(bool _walkable, Vector3 _worldPos, int _gridX, int _gridY, int _penalty) {
 		
 		walkable = _walkable;
@@ -24,6 +26,7 @@ public class Node : IHeapItem<Node> {
 
 	}
 
+	// Node f-cost (= g-cost + h-cost)
 	public int fCost {
 		
 		get {
@@ -32,6 +35,7 @@ public class Node : IHeapItem<Node> {
 
 	}
 
+	// Heap index
 	public int HeapIndex {
 		
 		get {
@@ -43,6 +47,7 @@ public class Node : IHeapItem<Node> {
 
 	}
 
+	// Compare nodes (using IComparable<Node>)
 	public int CompareTo(Node nodeToCompare) {
 
 		int compare = fCost.CompareTo (nodeToCompare.fCost);
