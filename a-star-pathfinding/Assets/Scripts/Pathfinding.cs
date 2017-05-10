@@ -8,6 +8,7 @@ using System;
 public class Pathfinding : MonoBehaviour {
 
 	PathRequestManager requestManager;
+	HeuristicsManager heuristicsManager;
 	Grid grid;
 
 	public int heuristic;
@@ -17,6 +18,7 @@ public class Pathfinding : MonoBehaviour {
 		
 		grid = GetComponent<Grid> ();
 		requestManager = GetComponent<PathRequestManager> ();
+		heuristicsManager = GetComponent<HeuristicsManager> ();
 
 		// SET HEURISTIC:
 		// 0: Manhattan
@@ -63,9 +65,11 @@ public class Pathfinding : MonoBehaviour {
 				// If path found, retrace path
 				if (currentNode == targetNode) {
 					pathSuccess = true;
+
 					// Stop timer and print time taken to find path
 					sw.Stop ();
 					print ("Path found: " + sw.ElapsedMilliseconds + "ms.");
+
 					break;
 				}
 
@@ -76,22 +80,24 @@ public class Pathfinding : MonoBehaviour {
 					}
 
 					// Calculate heuristic costs
-					int newCostToNeighbour;
+					int heuristicDistance;
 
 					switch (heuristic) {
 						case 0:
-							newCostToNeighbour = currentNode.gCost + GetManhattanDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							heuristicDistance = heuristicsManager.GetManhattanDistance (currentNode, neighbour);
 							break;
 						case 1:
-							newCostToNeighbour = currentNode.gCost + GetEuclideanDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							heuristicDistance = heuristicsManager.GetEuclideanDistance (currentNode, neighbour);
 							break;
 						case 2:
-							newCostToNeighbour = currentNode.gCost + GetDiagonalsDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							heuristicDistance = heuristicsManager.GetDiagonalsDistance (currentNode, neighbour);
 							break;
 						default:
-							newCostToNeighbour = currentNode.gCost + GetEuclideanDistance (currentNode, neighbour) + neighbour.movementPenalty;
+							heuristicDistance = heuristicsManager.GetEuclideanDistance (currentNode, neighbour);
 							break;
 					}
+
+					int newCostToNeighbour = currentNode.gCost + heuristicDistance + neighbour.movementPenalty;
 
 					// If new path to neighbour is shorter or neighbour not in open-set
 					if (newCostToNeighbour < neighbour.gCost || !openSet.Contains (neighbour)) {
@@ -101,16 +107,16 @@ public class Pathfinding : MonoBehaviour {
 						// Set neighbour's h-cost
 						switch (heuristic) {
 							case 0:
-								neighbour.hCost = GetManhattanDistance (neighbour, targetNode);
+								neighbour.hCost = heuristicsManager.GetManhattanDistance (neighbour, targetNode);
 								break;
 							case 1:
-								neighbour.hCost = GetEuclideanDistance (neighbour, targetNode);
+								neighbour.hCost = heuristicsManager.GetEuclideanDistance (neighbour, targetNode);
 								break;
 							case 2:
-								neighbour.hCost = GetDiagonalsDistance (neighbour, targetNode);
+								neighbour.hCost = heuristicsManager.GetDiagonalsDistance (neighbour, targetNode);
 								break;
 							default:
-								neighbour.hCost = GetEuclideanDistance (neighbour, targetNode);
+								neighbour.hCost = heuristicsManager.GetEuclideanDistance (neighbour, targetNode);
 								break;
 						}
 
@@ -175,46 +181,6 @@ public class Pathfinding : MonoBehaviour {
 		}
 
 		return waypoints.ToArray ();
-
-	}
-
-	// Manhattan distance heuristic
-	int GetManhattanDistance(Node nodeA, Node nodeB) {
-
-		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
-		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
-
-		// Calculate Manhattan distance
-		return distX + distY;
-
-	}
-
-	// Euclidian distance heuristic 
-	int GetEuclideanDistance(Node nodeA, Node nodeB) {
-
-		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
-		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
-
-		// Calculate Euclidean distance
-		return (distX * distX) + (distY * distY);
-
-	}
-
-	// Diagonals distance heuristic 
-	int GetDiagonalsDistance(Node nodeA, Node nodeB) {
-
-		int distX = Mathf.Abs (nodeA.gridX - nodeB.gridX);
-		int distY = Mathf.Abs (nodeA.gridY - nodeB.gridY);
-
-		if (distX > distY) {
-			// Calculate number of diagonal nodes to get to the same y value as nodeB, then calculate number
-			// of horizontal nodes to get to nodeB
-			return 14 * distY + 10 * (distX - distY);
-		}
-
-		 // Calculate number of diagonal nodes to get to the same x value as nodeB, then calculate number
-		 // of vertical nodes to get to nodeB
-		return 14 * distX + 10 * (distY - distX);
 
 	}
 
