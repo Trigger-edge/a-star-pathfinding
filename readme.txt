@@ -16,6 +16,6 @@ How to run program:
 3. To find C# code: Go to a-star-pathfinding/assets/scripts.
 
 Innovation:
-- Weighted A* search as opposed to ‘uniform’ A* search learnt in class
-- Implemented different heuristics (Manhattan distance, Euclidean distance, and Diagonal distance) so that each one’s performance can be compared
-- Built A* search that uses a heap of nodes for the open-set for simpler insertion and removal of (neighbouring) nodes
+- Used terrain-based weighted A* search as opposed to ‘uniform’ A* search learnt in class.
+- Implemented different heuristics (Manhattan, Euclidean, and Diagonal distances) so that performance can be compared.
+- Built a heap structure of nodes for the open-set for simpler insertion and removal of (neighbouring) nodes.
