@@ -13,7 +13,8 @@ How to run program:
 1. Download Unity3D.
 2. Go to a-star-pathfinding/assets/levels and open “AStar.unity” in Unity3D.
 3. Once opened in Unity, click on the “play” icon at the top of the screen to run the project.
-3. To find C# code: Go to a-star-pathfinding/assets/scripts.
+
+NOTE: To find C# code: Go to a-star-pathfinding/assets/scripts.
 
 Innovation:
 - Used terrain-based weighted A* search as opposed to ‘uniform’ A* search learnt in class.
