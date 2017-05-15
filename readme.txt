@@ -1,6 +1,8 @@
 COMP 3211 Final Project
 Weighted A* Search using the Unity Engine
 
+(THIS IS AN INDIVIDUAL PROJECT)
+
 Name: Vivian Nathaniel Arul Rajkumar
 ID: 20242020
 E-mail: vnar@connect.ust.hk
