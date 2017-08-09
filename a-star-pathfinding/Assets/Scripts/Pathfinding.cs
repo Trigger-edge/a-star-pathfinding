@@ -24,7 +24,7 @@ public class Pathfinding : MonoBehaviour {
 		// 0: Manhattan
 		// 1: Euclidian
 		// 2: Diagonals
-		heuristic = 2;
+		heuristic = 1;
 
 	}
 
